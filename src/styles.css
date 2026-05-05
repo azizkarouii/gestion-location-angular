@@ -1,1 +1,164 @@
 /* You can add global styles to this file, and also import other style files */
+
+:root {
+	--bg-page: #eef3f2;
+	--bg-surface: #ffffff;
+	--surface-soft: #f7fbfa;
+	--border-soft: #d7e5df;
+	--text-main: #122033;
+	--text-muted: #50637d;
+	--brand: #0f766e;
+	--brand-soft: #e0f0ea;
+	--danger: #b42318;
+	--shadow-soft: 0 10px 28px rgba(6, 32, 18, 0.06);
+	--app-bg-start: #f4f8f7;
+	--app-bg-end: #eaf0ef;
+	--app-bg-glow-left: rgba(16, 185, 129, 0.09);
+	--app-bg-glow-right: rgba(15, 118, 110, 0.1);
+	--topbar-bg: rgba(255, 255, 255, 0.88);
+}
+
+[data-theme='dark'] {
+	--bg-page: #0f172a;
+	--bg-surface: #111b2f;
+	--surface-soft: #16243d;
+	--border-soft: #293a59;
+	--text-main: #e2ecff;
+	--text-muted: #a3b2cc;
+	--brand: #25b7a6;
+	--brand-soft: #143a45;
+	--danger: #ff7b7b;
+	--shadow-soft: 0 10px 28px rgba(0, 0, 0, 0.35);
+	--app-bg-start: #0a1220;
+	--app-bg-end: #0f172a;
+	--app-bg-glow-left: rgba(37, 183, 166, 0.22);
+	--app-bg-glow-right: rgba(37, 99, 235, 0.2);
+	--topbar-bg: rgba(14, 22, 36, 0.86);
+}
+
+html,
+body {
+	height: 100%;
+}
+
+body {
+	margin: 0;
+	font-family: "Segoe UI", "Inter", "Manrope", "Helvetica Neue", Arial, sans-serif;
+	color: var(--text-main);
+	background: var(--bg-page);
+}
+
+[data-theme='dark'] .force-white-in-dark,
+[data-theme='dark'] .page-header,
+[data-theme='dark'] .compact-header,
+[data-theme='dark'] .form-card,
+[data-theme='dark'] .panel,
+[data-theme='dark'] .dashboard-hero,
+[data-theme='dark'] .stat-card,
+[data-theme='dark'] .payment-card,
+[data-theme='dark'] .auth-card,
+[data-theme='dark'] .residence-block,
+[data-theme='dark'] .residence-item,
+[data-theme='dark'] .compact-residence-item,
+[data-theme='dark'] .image-preview,
+[data-theme='dark'] .file-upload-block,
+[data-theme='dark'] .upload-block,
+[data-theme='dark'] .residence-preview,
+[data-theme='dark'] .image-modal-content,
+[data-theme='dark'] .detail-modal,
+[data-theme='dark'] .toolbar {
+	background: var(--bg-surface) !important;
+	color: var(--text-main) !important;
+	border-color: var(--border-soft) !important;
+	box-shadow: var(--shadow-soft) !important;
+}
+
+[data-theme='dark'] .force-white-in-dark,
+[data-theme='dark'] .page-header,
+[data-theme='dark'] .compact-header {
+	background: linear-gradient(135deg, var(--bg-surface) 0%, var(--surface-soft) 100%) !important;
+}
+
+[data-theme='dark'] .mat-mdc-form-field,
+[data-theme='dark'] .mat-mdc-form-field .mat-mdc-text-field-wrapper,
+[data-theme='dark'] .mat-mdc-form-field .mdc-text-field--filled,
+[data-theme='dark'] .mat-mdc-form-field .mdc-text-field--outlined,
+[data-theme='dark'] .mat-mdc-form-field .mat-mdc-form-field-flex,
+[data-theme='dark'] .mat-mdc-form-field .mat-mdc-form-field-infix {
+	background: var(--surface-soft) !important;
+}
+
+[data-theme='dark'] .mat-mdc-form-field .mat-mdc-form-field-focus-overlay {
+	background: transparent !important;
+}
+
+[data-theme='dark'] .mat-mdc-form-field .mat-mdc-input-element,
+[data-theme='dark'] .mat-mdc-form-field .mdc-text-field__input,
+[data-theme='dark'] .mat-mdc-form-field .mat-mdc-select-value,
+[data-theme='dark'] .mat-mdc-form-field .mat-mdc-select-value-text,
+[data-theme='dark'] .mat-mdc-form-field .mat-mdc-floating-label,
+[data-theme='dark'] .mat-mdc-form-field .mdc-floating-label,
+[data-theme='dark'] .mat-mdc-form-field .mat-mdc-form-field-hint,
+[data-theme='dark'] .mat-mdc-form-field .mat-mdc-form-field-error,
+[data-theme='dark'] .mat-mdc-form-field .mat-mdc-select-arrow,
+[data-theme='dark'] .mat-mdc-form-field .mat-mdc-icon-button {
+	color: var(--text-main) !important;
+	-webkit-text-fill-color: var(--text-main) !important;
+	caret-color: var(--text-main) !important;
+}
+
+[data-theme='dark'] .mat-mdc-form-field input::placeholder,
+[data-theme='dark'] .mat-mdc-form-field textarea::placeholder {
+	color: color-mix(in srgb, var(--text-main) 62%, transparent) !important;
+}
+
+[data-theme='dark'] .cdk-overlay-pane .mat-mdc-select-panel {
+	background: var(--bg-surface) !important;
+	color: var(--text-main) !important;
+	border: 1px solid var(--border-soft) !important;
+	box-shadow: var(--shadow-soft) !important;
+}
+
+[data-theme='dark'] .cdk-overlay-pane .mat-mdc-option,
+[data-theme='dark'] .cdk-overlay-pane .mat-mdc-option .mdc-list-item__primary-text,
+[data-theme='dark'] .cdk-overlay-pane .mat-mdc-option .mat-mdc-option-text,
+[data-theme='dark'] .cdk-overlay-pane .mat-mdc-optgroup-label {
+	color: #ffffff !important;
+	-webkit-text-fill-color: #ffffff !important;
+}
+
+[data-theme='dark'] .cdk-overlay-pane .mat-mdc-option.mdc-list-item--selected,
+[data-theme='dark'] .cdk-overlay-pane .mat-mdc-option:hover:not(.mdc-list-item--disabled),
+[data-theme='dark'] .cdk-overlay-pane .mat-mdc-option.mat-mdc-option-active {
+	background: color-mix(in srgb, var(--brand) 28%, var(--bg-surface)) !important;
+}
+
+[data-theme='dark'] .mat-mdc-button-base,
+[data-theme='dark'] .mat-mdc-button-base .mdc-button__label,
+[data-theme='dark'] .mat-mdc-button-base .mat-icon,
+[data-theme='dark'] .mat-mdc-button-base .mat-mdc-button-persistent-ripple,
+[data-theme='dark'] .mat-mdc-button-base .mat-mdc-button-ripple,
+[data-theme='dark'] .mat-mdc-outlined-button,
+[data-theme='dark'] .mat-mdc-text-button,
+[data-theme='dark'] .mat-mdc-unelevated-button,
+[data-theme='dark'] .mat-mdc-raised-button,
+[data-theme='dark'] .mat-mdc-icon-button,
+[data-theme='dark'] .actions a,
+[data-theme='dark'] .actions button,
+[data-theme='dark'] .tenant-actions a,
+[data-theme='dark'] .tenant-actions button,
+[data-theme='dark'] .item-actions a,
+[data-theme='dark'] .item-actions button,
+[data-theme='dark'] .residence-actions a,
+[data-theme='dark'] .filters button,
+[data-theme='dark'] mat-card-actions a {
+	color: #ffffff !important;
+	-webkit-text-fill-color: #ffffff !important;
+}
+
+.force-white-in-dark {
+	background: var(--bg-surface) !important;
+	color: var(--text-main) !important;
+	border-radius: 10px;
+	padding: 12px;
+}

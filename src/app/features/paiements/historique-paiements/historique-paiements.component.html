@@ -1,0 +1,64 @@
+<section class="page-shell">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Paiements</p>
+      <h1>Historique des paiements</h1>
+      <p class="subtitle">Filtrez par mois, exportez et générez des reçus PDF.</p>
+    </div>
+
+    <div class="actions">
+      <a mat-flat-button color="primary" routerLink="/paiements/ajouter">Ajouter un paiement</a>
+      <button mat-stroked-button type="button" (click)="exportCurrentMonth()">Exporter CSV</button>
+    </div>
+  </header>
+
+  <mat-card class="toolbar">
+    <div class="filters">
+      <mat-form-field appearance="outline">
+        <mat-label>Mois</mat-label>
+        <input matInput type="number" [value]="monthFilter()" (input)="monthFilter.set(($any($event.target)).valueAsNumber)" min="1" max="12" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Année</mat-label>
+        <input matInput type="number" [value]="yearFilter()" (input)="yearFilter.set(($any($event.target)).valueAsNumber)" />
+      </mat-form-field>
+    </div>
+  </mat-card>
+
+  <p class="summary">{{ filteredPaiements().length }} paiement(s) trouvé(s) - Total: {{ formatCurrency(totalMois()) }}</p>
+
+  <div class="empty-state" *ngIf="!filteredPaiements().length">
+    Aucun paiement enregistré pour cette période.
+  </div>
+
+  <div class="cards" *ngIf="filteredPaiements().length">
+    <mat-card class="payment-card force-white-in-dark" *ngFor="let paiement of filteredPaiements()">
+      <div class="payment-head">
+        <div>
+          <h3>{{ locataireNom(paiement.locataireId) }}</h3>
+          <p>{{ paiement.mois }}/{{ paiement.annee }}</p>
+        </div>
+        <span class="status" [class.paid]="statusClass(paiement.statut) === 'payé'" [class.late]="statusClass(paiement.statut) === 'en_retard'" [class.waiting]="statusClass(paiement.statut) === 'en_attente'">
+          {{ paiement.statut }}
+        </span>
+      </div>
+
+      <dl>
+        <div><dt>Montant</dt><dd>{{ formatCurrency(paiement.montant) }}</dd></div>
+        <div><dt>Date de paiement</dt><dd>{{ paiement.datePaiement ? (paiement.datePaiement | date:'mediumDate') : '—' }}</dd></div>
+      </dl>
+
+      <div class="payment-actions">
+        <button mat-raised-button color="primary" type="button" (click)="generateReceipt(paiement)" class="receipt-button">
+          <mat-icon>download</mat-icon>
+          Reçu PDF
+        </button>
+        <button mat-stroked-button color="warn" type="button" (click)="deletePaiement(paiement)" class="delete-button">
+          <mat-icon>delete</mat-icon>
+          Supprimer
+        </button>
+      </div>
+    </mat-card>
+  </div>
+</section>

@@ -1,0 +1,105 @@
+<section class="profile-shell">
+  <header class="page-header compact-header">
+    <div>
+      <p class="eyebrow">Profil propriétaire</p>
+      <h1>Mon profil</h1>
+    </div>
+  </header>
+
+  <div class="profile-grid">
+    <mat-card class="profile-card identity-card">
+      <div class="identity-row">
+        <div class="avatar" aria-hidden="true">
+          <mat-icon>person</mat-icon>
+        </div>
+
+        <div class="identity-info">
+          <h2>{{ form.controls.nomComplet.value || 'Propriétaire' }}</h2>
+          <p>{{ form.controls.email.value }}</p>
+        </div>
+      </div>
+
+      <div class="identity-residences">
+        <div class="residence-summary">
+          <h3>Mes maisons / appartements</h3>
+          <span>{{ residences.length }}</span>
+        </div>
+
+          <div class="compact-residence-list" *ngIf="residences.length; else noResidenceSide">
+          <article class="compact-residence-item force-white-in-dark" *ngFor="let residence of residences; trackBy: trackByResidenceId">
+            <strong>{{ residence.capacity || 'Logement' }}</strong>
+            <span>{{ residence.address }}</span>
+          </article>
+        </div>
+
+        <ng-template #noResidenceSide>
+          <p class="empty-state side">Aucune résidence pour le moment.</p>
+        </ng-template>
+      </div>
+    </mat-card>
+
+    <mat-card class="profile-card form-card">
+      <form [formGroup]="form" (ngSubmit)="save()" class="profile-form">
+        <div class="section-title">
+          <h2>Informations du propriétaire</h2>
+        </div>
+
+        <div class="grid">
+          <mat-form-field appearance="outline">
+            <mat-label>Nom complet</mat-label>
+            <input matInput formControlName="nomComplet" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" autocomplete="email" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Téléphone</mat-label>
+            <input matInput formControlName="telephone" autocomplete="tel" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Adresse</mat-label>
+            <input matInput formControlName="adresse" autocomplete="street-address" />
+          </mat-form-field>
+        </div>
+
+        <div class="residence-block">
+          <div class="residence-head">
+            <div>
+              <h3>Maisons / appartements</h3>
+            </div>
+          </div>
+
+          <div class="residence-list" *ngIf="residences.length; else noResidence">
+            <div class="residence-item" *ngFor="let residence of residences; let index = index">
+              <div>
+                <p>{{ residenceLabel(residence) }}</p>
+                <small>{{ residencePropertiesText(residence) }}</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="residence-actions">
+            <a mat-stroked-button routerLink="/residences">Gérer les maisons/appartements</a>
+          </div>
+
+          <ng-template #noResidence>
+            <p class="empty-state">Aucune résidence ajoutée pour le moment.</p>
+          </ng-template>
+        </div>
+
+        <p class="success" *ngIf="successMessage">{{ successMessage }}</p>
+        <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+        <div class="actions">
+          <button mat-flat-button color="primary" type="submit" [disabled]="loading">
+            {{ loading ? 'Enregistrement...' : 'Enregistrer les modifications' }}
+          </button>
+        </div>
+      </form>
+    </mat-card>
+  </div>
+</section>

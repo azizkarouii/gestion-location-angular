@@ -1,0 +1,149 @@
+<section class="dashboard-grid">
+  <header class="dashboard-hero">
+    <div>
+      <p class="eyebrow">Vue d’ensemble</p>
+      <h1>Dashboard locatif</h1>
+      <p class="subtitle">Surveillez vos revenus, vos retards et le statut de vos logements.</p>
+    </div>
+
+    <div class="actions">
+      <a mat-flat-button color="primary" routerLink="/locataires/ajouter">Ajouter un locataire</a>
+      <a mat-stroked-button color="primary" routerLink="/paiements/ajouter">Enregistrer un paiement</a>
+    </div>
+  </header>
+
+  <div class="stats">
+    <mat-card class="stat-card clickable" role="button" tabindex="0" (click)="openStatDetails('loyers')" (keydown)="onStatCardKeydown($event, 'loyers')">
+      <span>Total loyers du mois</span>
+      <strong>{{ formatCurrency(totalLoyersMensuels()) }}</strong>
+    </mat-card>
+    <mat-card class="stat-card clickable" role="button" tabindex="0" (click)="openStatDetails('actifs')" (keydown)="onStatCardKeydown($event, 'actifs')">
+      <span>Locataires actifs</span>
+      <strong>{{ activeLocataires() }}</strong>
+    </mat-card>
+    <mat-card class="stat-card alert clickable" role="button" tabindex="0" (click)="openStatDetails('retards')" (keydown)="onStatCardKeydown($event, 'retards')">
+      <span>Paiements en retard</span>
+      <strong>{{ lateLocataires().length }}</strong>
+    </mat-card>
+    <mat-card class="stat-card clickable" role="button" tabindex="0" (click)="openStatDetails('recouvrement')" (keydown)="onStatCardKeydown($event, 'recouvrement')">
+      <span>Taux de recouvrement</span>
+      <strong>{{ recoveryRate() }}%</strong>
+    </mat-card>
+  </div>
+
+  <section class="panels">
+    <mat-card class="panel">
+      <mat-card-title>Revenus par mois</mat-card-title>
+      <canvas #revenueChart></canvas>
+    </mat-card>
+
+    <mat-card class="panel">
+      <mat-card-title>Répartition des paiements</mat-card-title>
+      <canvas #statusChart></canvas>
+    </mat-card>
+  </section>
+
+  <section class="panels">
+    <mat-card class="panel">
+      <mat-card-title>Alertes</mat-card-title>
+      <div class="alert-list" *ngIf="lateLocataires().length; else noAlert">
+        <article class="alert-item" *ngFor="let locataire of lateLocataires()">
+          <strong>{{ locataire.nom }}</strong>
+          <span>{{ locataire.adresse }}</span>
+        </article>
+      </div>
+      <ng-template #noAlert>
+        <p class="empty-state">Aucun retard détecté pour le moment.</p>
+      </ng-template>
+    </mat-card>
+
+    <mat-card class="panel">
+      <mat-card-title>Rappels</mat-card-title>
+      <p class="empty-state">
+        {{ waitingLocataires().length }} locataire(s) sont en attente d’échéance ou de paiement ce mois-ci.
+      </p>
+    </mat-card>
+  </section>
+
+  <div class="modal-overlay" *ngIf="selectedStatModal as modal" (click)="closeStatDetails()">
+    <mat-card class="detail-modal" (click)="$event.stopPropagation()">
+      <header class="detail-modal-header">
+        <div>
+          <h2>{{ statModalTitle() }}</h2>
+          <p>{{ monthLabel() }}</p>
+        </div>
+        <button mat-stroked-button type="button" (click)="closeStatDetails()">Fermer</button>
+      </header>
+
+      <div [ngSwitch]="modal" class="detail-modal-body">
+        <ng-container *ngSwitchCase="'loyers'">
+          <p class="detail-number">{{ formatCurrency(totalLoyersMensuels()) }}</p>
+          <div class="detail-list" *ngIf="activeLocatairesList().length; else noActiveLocataires">
+            <article class="detail-item" *ngFor="let locataire of activeLocatairesList()">
+              <strong>{{ locataire.nom }}</strong>
+              <span>{{ locataire.adresse }}</span>
+              <em>{{ formatCurrency(locataire.montantLoyer) }}</em>
+            </article>
+          </div>
+          <ng-template #noActiveLocataires>
+            <p class="empty-state">Aucun locataire actif trouvé.</p>
+          </ng-template>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'actifs'">
+          <p class="detail-number">{{ activeLocataires() }} locataire(s)</p>
+          <div class="detail-list" *ngIf="activeLocatairesList().length; else noActifs">
+            <article class="detail-item" *ngFor="let locataire of activeLocatairesList()">
+              <strong>{{ locataire.nom }}</strong>
+              <span>{{ locataire.adresse }}</span>
+            </article>
+          </div>
+          <ng-template #noActifs>
+            <p class="empty-state">Aucun locataire actif pour le moment.</p>
+          </ng-template>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'retards'">
+          <p class="detail-number">{{ lateLocataires().length }} retard(s)</p>
+          <div class="detail-list" *ngIf="lateLocataires().length; else noRetards">
+            <article class="detail-item warning" *ngFor="let locataire of lateLocataires()">
+              <strong>{{ locataire.nom }}</strong>
+              <span>{{ locataire.adresse }}</span>
+            </article>
+          </div>
+          <ng-template #noRetards>
+            <p class="empty-state">Aucun paiement en retard ce mois-ci.</p>
+          </ng-template>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'recouvrement'">
+          <p class="detail-number">{{ recoveryRate() }}%</p>
+          <div class="recovery-grid">
+            <article>
+              <span>Locataires actifs</span>
+              <strong>{{ activeLocataires() }}</strong>
+            </article>
+            <article>
+              <span>Paiements reçus</span>
+              <strong>{{ paidThisMonth() }}</strong>
+            </article>
+            <article>
+              <span>Paiements en attente</span>
+              <strong>{{ unpaidThisMonthLocataires().length }}</strong>
+            </article>
+          </div>
+
+          <div class="detail-list" *ngIf="unpaidThisMonthLocataires().length; else fullyPaid">
+            <article class="detail-item" *ngFor="let locataire of unpaidThisMonthLocataires()">
+              <strong>{{ locataire.nom }}</strong>
+              <span>{{ locataire.adresse }}</span>
+            </article>
+          </div>
+          <ng-template #fullyPaid>
+            <p class="empty-state">Tous les paiements attendus sont encaissés.</p>
+          </ng-template>
+        </ng-container>
+      </div>
+    </mat-card>
+  </div>
+</section>

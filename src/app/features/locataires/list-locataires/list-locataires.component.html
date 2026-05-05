@@ -1,0 +1,64 @@
+<section class="page-shell">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Gestion des locataires</p>
+      <h1>Liste des locataires</h1>
+      <p class="subtitle">Recherche, filtres, archivage et export CSV.</p>
+    </div>
+
+    <div class="actions">
+      <a mat-flat-button color="primary" routerLink="/locataires/ajouter">Ajouter</a>
+      <button mat-stroked-button type="button" (click)="exportLocataires()">Exporter CSV</button>
+    </div>
+  </header>
+
+  <mat-card class="toolbar">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Rechercher par nom</mat-label>
+      <input matInput type="text" [value]="searchText()" (input)="searchText.set(($any($event.target)).value)" />
+    </mat-form-field>
+
+    <div class="filters">
+      <button mat-button type="button" [class.active]="filterMode() === 'all'" (click)="filterMode.set('all')">Tous</button>
+      <button mat-button type="button" [class.active]="filterMode() === 'actifs'" (click)="filterMode.set('actifs')">Actifs</button>
+      <button mat-button type="button" [class.active]="filterMode() === 'inactifs'" (click)="filterMode.set('inactifs')">Inactifs</button>
+      <button mat-button type="button" [class.active]="filterMode() === 'retards'" (click)="filterMode.set('retards')">Retards</button>
+      <button mat-button type="button" [class.active]="filterMode() === 'loyers'" (click)="filterMode.set('loyers')">Loyers élevés</button>
+    </div>
+  </mat-card>
+
+  <p class="summary">{{ filteredLocataires().length }} locataire(s) affiché(s) - {{ lateCount() }} en retard ce mois-ci</p>
+
+  <div class="empty-state" *ngIf="!filteredLocataires().length">
+    Aucun locataire ne correspond aux filtres actuels.
+  </div>
+
+  <div class="cards" *ngIf="filteredLocataires().length">
+    <mat-card class="tenant-card force-white-in-dark" *ngFor="let locataire of filteredLocataires(); trackBy: trackById">
+      <div class="tenant-head">
+        <div>
+          <h3>{{ locataire.nom }}</h3>
+          <p>{{ locataire.residenceAddress || locataire.adresse }}</p>
+        </div>
+        <span class="status" [class.paid]="statusLabel(locataire) === 'payé'" [class.late]="statusLabel(locataire) === 'en_retard'" [class.waiting]="statusLabel(locataire) === 'en_attente'">
+          {{ statusLabel(locataire) }}
+        </span>
+      </div>
+
+      <dl>
+        <div><dt>Téléphone</dt><dd>{{ locataire.telephone }}</dd></div>
+        <div><dt>Loyer</dt><dd>{{ formatCurrency(locataire.montantLoyer) }}</dd></div>
+        <div><dt>Capacité</dt><dd>{{ locataire.residenceCapacity || '-' }}</dd></div>
+        <div><dt>Échéance</dt><dd>{{ locataire.dateEcheance }}</dd></div>
+        <div><dt>Statut</dt><dd>{{ locataire.actif ? 'Actif' : 'Inactif' }}</dd></div>
+      </dl>
+
+      <div class="tenant-actions">
+        <a mat-button color="primary" [routerLink]="['/locataires/ajouter']" [queryParams]="{ id: locataire.id }">Modifier</a>
+        <a mat-button color="primary" [routerLink]="['/paiements/ajouter']" [queryParams]="{ locataireId: locataire.id }">Paiement</a>
+        <button mat-button type="button" (click)="archive(locataire)">{{ locataire.actif ? 'Archiver' : 'Réactiver' }}</button>
+        <button mat-button color="warn" type="button" (click)="remove(locataire)">Supprimer</button>
+      </div>
+    </mat-card>
+  </div>
+</section>

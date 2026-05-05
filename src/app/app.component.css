@@ -1,0 +1,123 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, var(--app-bg-glow-left), transparent 30%),
+    radial-gradient(circle at top right, var(--app-bg-glow-right), transparent 26%),
+    linear-gradient(180deg, var(--app-bg-start) 0%, var(--app-bg-end) 100%);
+  color: var(--text-main);
+}
+
+.shell {
+  min-height: 100vh;
+}
+
+.topbar {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-areas: 'brand nav actions';
+  align-items: center;
+  gap: 1.25rem;
+  padding: 0.9rem 1.4rem;
+  backdrop-filter: blur(8px);
+  background: var(--topbar-bg);
+  border-bottom: 1px solid var(--border-soft);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.brand {
+  grid-area: brand;
+  color: var(--text-main);
+  font-size: 1.45rem;
+  font-weight: 800;
+  text-decoration: none;
+  letter-spacing: 0.01em;
+}
+
+.nav-links {
+  grid-area: nav;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.nav-links a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-weight: 700;
+  padding: 0.35rem 0.55rem;
+  border-radius: 10px;
+}
+
+.nav-links a.active {
+  color: var(--brand);
+  background: var(--brand-soft);
+}
+
+.content {
+  padding: 1.6rem;
+  max-width: 1320px;
+  margin: 0 auto;
+}
+
+.header-actions {
+  grid-area: actions;
+  display: flex;
+  gap: 0.55rem;
+  justify-self: end;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.theme-btn,
+.logout-btn {
+  white-space: nowrap;
+}
+
+.theme-btn {
+  border: 1px solid var(--border-soft);
+  color: var(--text-main);
+  background: color-mix(in srgb, var(--bg-surface) 76%, transparent);
+}
+
+.theme-btn mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+@media (max-width: 760px) {
+  .topbar {
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      'brand actions'
+      'nav nav';
+    padding: 0.9rem 0.95rem;
+  }
+
+  .nav-links {
+    justify-content: flex-start;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .nav-links::-webkit-scrollbar {
+    display: none;
+  }
+
+  .brand {
+    font-size: 1.3rem;
+  }
+
+  .header-actions {
+    align-self: start;
+  }
+
+  .content {
+    padding: 1rem;
+  }
+}

@@ -1,0 +1,64 @@
+<section class="page-shell">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Paiements</p>
+      <h1>Ajouter un paiement</h1>
+      <p class="subtitle">Associez un paiement au locataire et laissez le statut se calculer automatiquement.</p>
+    </div>
+
+    <a mat-stroked-button routerLink="/paiements">Retour à l’historique</a>
+  </header>
+
+  <mat-card class="form-card">
+    <div class="form-intro">
+      <h2>Saisie du paiement</h2>
+      <p>Sélectionnez un locataire, puis confirmez la période et le montant. Le statut sera déduit automatiquement.</p>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="payment-form">
+      <div class="grid">
+        <mat-form-field appearance="outline" class="span-2">
+          <mat-label>Locataire</mat-label>
+          <select matNativeControl formControlName="locataireId" (change)="syncAmount()">
+            <option value="">Sélectionner</option>
+            <option *ngFor="let locataire of locataires()" [value]="locataire.id">{{ locataire.nom }}</option>
+          </select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Mois</mat-label>
+          <input matInput type="number" formControlName="mois" min="1" max="12" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Année</mat-label>
+          <input matInput type="number" formControlName="annee" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Montant</mat-label>
+          <input matInput type="number" formControlName="montant" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Date de paiement</mat-label>
+          <input matInput type="date" formControlName="datePaiement" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="span-2">
+          <mat-label>Notes</mat-label>
+          <textarea matInput rows="4" formControlName="notes"></textarea>
+        </mat-form-field>
+      </div>
+
+      <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+      <div class="actions">
+        <button mat-flat-button color="primary" type="submit" [disabled]="loading" class="cta">
+          {{ loading ? 'Enregistrement...' : 'Enregistrer le paiement' }}
+        </button>
+        <a mat-stroked-button routerLink="/paiements">Annuler</a>
+      </div>
+    </form>
+  </mat-card>
+</section>

@@ -1,0 +1,81 @@
+<section class="page-shell">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Biens immobiliers</p>
+      <h1>Maisons / appartements</h1>
+    </div>
+
+    <a mat-stroked-button routerLink="/locataires">Retour</a>
+  </header>
+
+  <mat-card class="panel">
+    <div class="section-title">
+      <h2>{{ editingIndex === null ? 'Ajouter un logement' : 'Modifier le logement' }}</h2>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="saveResidence()" class="form-grid">
+      <mat-form-field appearance="outline">
+        <mat-label>Adresse</mat-label>
+        <input matInput formControlName="address" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Capacité</mat-label>
+        <input matInput formControlName="capacity" placeholder="S+1, S+2..." />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="span-2">
+        <mat-label>Propriétés</mat-label>
+        <input matInput formControlName="propertiesText" placeholder="balcon, climatisation, parking" />
+      </mat-form-field>
+
+      <div class="span-2 upload-block force-white-in-dark">
+        <label>Images du logement (base64)</label>
+        <input type="file" accept="image/*" multiple (change)="onResidenceImagesSelected($event)" />
+      </div>
+
+      <div class="span-2 image-preview-list force-white-in-dark" *ngIf="draftImages.length">
+        <div class="image-preview" *ngFor="let image of draftImages; let index = index">
+          <img [src]="image" alt="Image du logement" />
+          <button mat-button color="warn" type="button" (click)="removeDraftImage(index)">Supprimer</button>
+        </div>
+      </div>
+
+      <div class="actions span-2">
+        <button mat-flat-button color="primary" type="submit" [disabled]="loading">
+          {{ loading ? 'Sauvegarde...' : (editingIndex === null ? 'Ajouter' : 'Mettre à jour') }}
+        </button>
+        <button mat-button type="button" *ngIf="editingIndex !== null" (click)="cancelEdit()">Annuler</button>
+      </div>
+    </form>
+  </mat-card>
+
+  <mat-card class="panel" *ngIf="residences.length; else emptyState">
+    <div class="section-title">
+      <h2>Mes logements</h2>
+    </div>
+
+    <div class="residence-list">
+      <article class="residence-item" *ngFor="let residence of residences; let index = index; trackBy: trackByResidenceId">
+        <div>
+          <h3>{{ residence.capacity || 'Logement' }}</h3>
+          <p>{{ residence.address }}</p>
+          <small>{{ residencePropertiesText(residence) }}</small>
+        </div>
+        <div class="item-actions">
+          <button mat-button type="button" (click)="editResidence(index)">Modifier</button>
+          <button mat-button color="warn" type="button" (click)="removeResidence(index)">Supprimer</button>
+        </div>
+      </article>
+    </div>
+  </mat-card>
+
+  <ng-template #emptyState>
+    <mat-card class="panel">
+      <p class="empty">Aucun logement ajouté pour le moment.</p>
+    </mat-card>
+  </ng-template>
+
+  <p class="success" *ngIf="successMessage">{{ successMessage }}</p>
+  <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+</section>

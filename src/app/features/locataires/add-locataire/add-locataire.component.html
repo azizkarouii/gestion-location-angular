@@ -1,0 +1,113 @@
+<section class="page-shell">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Locataire</p>
+      <h1>{{ editingId ? 'Modifier un locataire' : 'Ajouter un locataire' }}</h1>
+      <p class="subtitle">Renseignez les informations du logement et les liens utiles.</p>
+    </div>
+
+    <a mat-stroked-button routerLink="/locataires">Retour à la liste</a>
+  </header>
+
+  <mat-card class="form-card">
+    <div class="form-intro">
+      <h2>Informations du logement</h2>
+      <p>Les champs marqués d'un astérisque sont obligatoires. Vérifiez surtout le montant et la date d'échéance.</p>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="tenant-form">
+      <div class="grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Nom complet</mat-label>
+          <input matInput formControlName="nom" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Téléphone</mat-label>
+          <input matInput formControlName="telephone" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="span-full">
+          <mat-label>Maison / appartement</mat-label>
+          <mat-select formControlName="residenceId" (selectionChange)="selectedResidence()">
+            <mat-option *ngFor="let residence of residences()" [value]="residence.id">
+              {{ residenceSummary(residence) }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-card class="residence-preview span-2 force-white-in-dark" *ngIf="selectedResidence() as residence">
+          <div>
+            <p class="preview-label">Logement sélectionné</p>
+            <h3>{{ residence.capacity || 'Logement' }}</h3>
+            <p>{{ residence.address }}</p>
+            <p>{{ residence.properties.length ? residence.properties.join(' · ') : 'Aucune propriété renseignée' }}</p>
+          </div>
+          <div class="preview-images" *ngIf="residence.images.length">
+            <img
+              *ngFor="let image of residence.images"
+              [src]="image"
+              alt="Image du logement"
+              role="button"
+              tabindex="0"
+              (click)="openImage(image)"
+              (keydown.enter)="openImage(image)"
+              (keydown.space)="openImage(image); $event.preventDefault()"
+            />
+          </div>
+        </mat-card>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Montant du loyer</mat-label>
+          <input matInput type="number" formControlName="montantLoyer" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Jour d’échéance</mat-label>
+          <input matInput type="number" formControlName="dateEcheance" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Date d’entrée</mat-label>
+          <input matInput type="date" formControlName="dateEntree" />
+        </mat-form-field>
+
+        <div class="span-2 file-upload-block force-white-in-dark">
+          <label class="file-upload-label">Images état des lieux</label>
+          <input type="file" accept="image/*" multiple (change)="onEtatDesLieuxSelected($event)" />
+        </div>
+
+        <div class="span-2 image-preview-list force-white-in-dark" *ngIf="etatDesLieuxImages.length">
+          <div class="image-preview" *ngFor="let image of etatDesLieuxImages; let index = index">
+            <img
+              [src]="image"
+              alt="État des lieux"
+              role="button"
+              tabindex="0"
+              (click)="openImage(image)"
+              (keydown.enter)="openImage(image)"
+              (keydown.space)="openImage(image); $event.preventDefault()"
+            />
+            <button mat-button color="warn" type="button" (click)="removeEtatDesLieuxImage(index)">Supprimer</button>
+          </div>
+        </div>
+      </div>
+
+      <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+      <div class="actions">
+        <button mat-flat-button color="primary" type="submit" [disabled]="loading" class="cta">
+          {{ loading ? 'Enregistrement...' : (editingId ? 'Mettre à jour' : 'Créer le locataire') }}
+        </button>
+        <a mat-stroked-button routerLink="/locataires">Annuler</a>
+      </div>
+    </form>
+  </mat-card>
+
+  <div class="image-modal" *ngIf="openedImage as image" (click)="closeOpenedImage()">
+    <div class="image-modal-content" (click)="$event.stopPropagation()">
+      <button mat-stroked-button type="button" class="image-modal-close" (click)="closeOpenedImage()">Fermer</button>
+      <img [src]="image" alt="Aperçu agrandi" />
+    </div>
+  </div>
+</section>

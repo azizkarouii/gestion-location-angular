@@ -1,0 +1,154 @@
+:host {
+  display: block;
+}
+
+.page-shell {
+  display: grid;
+  gap: 1.5rem;
+  max-width: 1040px;
+  margin: 0 auto;
+}
+
+.page-header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  background: linear-gradient(135deg, var(--bg-surface) 0%, var(--surface-soft) 100%);
+  border: 1px solid var(--border-soft);
+  border-radius: 18px;
+  padding: 1.1rem 1.2rem;
+  box-shadow: var(--shadow-soft);
+}
+
+.eyebrow {
+  margin: 0 0 0.45rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #0f766e;
+  font-weight: 800;
+  font-size: 0.8rem;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: clamp(1.85rem, 4vw, 2.5rem);
+  line-height: 1.15;
+  color: var(--text-main);
+}
+
+.subtitle {
+  margin: 0.45rem 0 0;
+  color: var(--text-muted);
+}
+
+.form-card {
+  padding: 1rem;
+  border-radius: 18px;
+  border: 1px solid var(--border-soft);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-soft);
+}
+
+.form-intro {
+  padding: 0.35rem 0.2rem 0.9rem;
+  border-bottom: 1px dashed var(--border-soft);
+  margin-bottom: 1rem;
+}
+
+.form-intro h2 {
+  margin: 0;
+  font-size: 1.05rem;
+  color: var(--text-main);
+}
+
+.form-intro p {
+  margin: 0.45rem 0 0;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+
+.payment-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.grid mat-form-field {
+  grid-column: span 2;
+}
+
+.span-2 {
+  grid-column: span 6;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  border-top: 1px dashed var(--border-soft);
+  padding-top: 0.8rem;
+}
+
+.error {
+  margin: 0;
+  color: var(--danger);
+  background: #fee2e2;
+  border: 1px solid #fecaca;
+  border-radius: 12px;
+  padding: 0.6rem 0.75rem;
+  font-weight: 600;
+}
+
+.cta {
+  min-width: 200px;
+}
+
+@media (max-width: 960px) {
+  .grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .grid mat-form-field {
+    grid-column: span 2;
+  }
+
+  .span-2 {
+    grid-column: span 4;
+  }
+}
+
+@media (max-width: 640px) {
+  .page-shell {
+    gap: 1rem;
+  }
+
+  .page-header {
+    padding: 0.9rem;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .grid mat-form-field,
+  .span-2 {
+    grid-column: span 1;
+  }
+
+  .actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cta {
+    width: 100%;
+  }
+}
+
